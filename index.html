@@ -1,0 +1,69 @@
+<h1> WELCOME TO BUTTON CLICK! </h1>
+All you have to do is click the button! <br>
+
+<script>
+    var clicks = 0
+    var previousClicks = 0
+    function load() {
+        clicks = getCookie("clicks")
+        clicks = parseInt(clicks)
+        previousClicks = clicks
+        var showr = document.getElementById('clicks')
+        showr.innerHTML = clicks
+    }
+    
+    function unload() {
+        document.cookie = "clicks=" + clicks
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+             while (c.charAt(0) == ' ') {
+                  c = c.substring(1);
+            }
+           if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    
+    function restart() {
+        var restart = confirm("Are you sure you want to restart? You will lose " + clicks + " clicks.")
+        if (restart) {
+            previousClicks = clicks
+            clicks = 0
+            unload()
+            load()
+            alert("You just killed " + previousClicks + " clicks. If you want them back, please open console, then type \"restoreClicks()\"")
+        } else {
+            alert("You just saved " + clicks + " clicks.")
+        }
+    }
+
+    function restoreClicks() {
+        clicks = previousClicks
+        unload()
+        load()
+        alert("You just revived " + clicks + " clicks.")
+    }
+
+    function checkClicks() {
+        if (clicks > previousClicks) {
+            clicks = previousClicks
+            alert("No Cheating!")
+        }
+    }
+</script>
+
+<button onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks;" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
+<p id="clicks">0</p>
+<br onload = "load()" onunload = "unload()">
+<button onclick="unload()" >Save</button> <button onclick="load()">Load</button> <button onclick="restart()" style = "background-color:red">Restart</button>
+<script>
+    setInterval(checkClicks, 10)
+</script>
