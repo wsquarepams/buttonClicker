@@ -1,6 +1,10 @@
 <h1> WELCOME TO BUTTON CLICK! </h1>
 Click the button! (Version: Beta 0.4) <br>
 
+<head>
+    <title>Button Clicker</title>
+</head>
+
 <script>
     var clicks = 0
     var previousClicks = 0
@@ -100,10 +104,10 @@ Click the button! (Version: Beta 0.4) <br>
         if (cookieCode == clicks && clicks >= price) {
             cookieEnabled += 0.1
             cooldownAdder += 0.1
-            previousClicks -= clicks
             clicks -= price
-            previousPrice = price * 25
-            price = price * 25
+            previousClicks -= price
+            previousPrice = price + 125
+            price = price + 125
             var showr = document.getElementById('clicks')
             showr.innerHTML = clicks
         }
