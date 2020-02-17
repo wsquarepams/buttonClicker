@@ -4,16 +4,29 @@ All you have to do is click the button! <br>
 <script>
     var clicks = 0
     var previousClicks = 0
+    var cooldownAdder = 1
+    var cookieEnabled = 1
+    var cooldownInterval;
+    var price = 25
+    var previousPrice = 25
     function load() {
-        clicks = getCookie("clicks")
+        clicks = localStorage.getItem('clicks')
         clicks = parseInt(clicks)
         previousClicks = clicks
+        cooldownAdder = localStorage.getItem('cooldownAdder')
+        cooldownAdder = parseInt(cooldownAdder)
+        cookieEnabled = cooldownAdder
+        price = localStorage.getItem('price')
+        price = parseInt(price)
+        previousPrice = price
         var showr = document.getElementById('clicks')
         showr.innerHTML = clicks
     }
     
     function unload() {
-        document.cookie = "clicks=" + clicks
+        localStorage.setItem('clicks', clicks)
+        localStorage.setItem('price', price)
+        localStorage.setItem('cooldownAdder', cooldownAdder)
     }
 
     function getCookie(cname) {
@@ -37,6 +50,8 @@ All you have to do is click the button! <br>
         if (restart) {
             previousClicks = clicks
             clicks = 0
+            price = 25
+            cooldownAdder = 1
             unload()
             load()
             alert("You just killed " + previousClicks + " clicks. If you want them back, please open console, then type \"restoreClicks()\"")
@@ -52,18 +67,48 @@ All you have to do is click the button! <br>
         alert("You just revived " + clicks + " clicks.")
     }
 
-    function checkClicks() {
-        if (clicks > previousClicks) {
+    function update() {
+        if (clicks > previousClicks || cooldownAdder > cookieEnabled || price > previousPrice) {
             clicks = previousClicks
+            cooldownAdder = cookieEnabled
+            price = previousPrice
+            var showr = document.getElementById('clicks')
+            showr.innerHTML = clicks
             alert("No Cheating!")
+        }
+        price = Math.round(price)
+        document.getElementById("cooldownPrice").innerHTML = price
+    }
+
+    function updateCooldown() {
+        var cooldown = document.getElementById("cooldown")
+        var button = document.getElementById("clicko")
+        button.disabled = true
+        cooldown.value += cooldownAdder
+        if (cooldown.value == 100) {
+            clearInterval(cooldownInterval)
+            cooldown.value = "0"
+            button.disabled = false
+        }
+    }
+
+    function speedUpCooldown(cookieCode) {
+        if (cookieCode == clicks && clicks >= price) {
+            cookieEnabled += 0.1
+            cooldownAdder += 0.1
+            previousPrice = price * 25
+            price = price * 25
         }
     }
 </script>
 
-<button onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks;" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
-<p id="clicks">0</p>
-<br onload = "load()" onunload = "unload()">
+<button id="clicko" onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
+<progress id="cooldown" value = "0" max = "100"></progress> <br>
+Clicks: <p id="clicks">0</p> <br>
+<h2>Upgrades</h2>
+<button onclick="speedUpCooldown(clicks)">Lower Cooldown</button> <br> 
+Price: <p id="cooldownPrice">0</p> <br>
 <button onclick="unload()" >Save</button> <button onclick="load()">Load</button> <button onclick="restart()" style = "background-color:red">Restart</button>
 <script>
-    setInterval(checkClicks, 10)
+    setInterval(update, 10)
 </script>
