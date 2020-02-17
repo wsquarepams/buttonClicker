@@ -112,13 +112,6 @@ Click the button! (Beta Version: 1.6.4) <br>
                 showr.innerHTML = clicks
             }
         }
-
-        function autosaveFunc() {
-            var yesAutoSave = document.getElementById("autosaveCheckbox")
-            if (yesAutoSave.checked) {
-                unload()
-            }
-        }
     </script>
 
     <button id="clicko" onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
@@ -127,11 +120,9 @@ Click the button! (Beta Version: 1.6.4) <br>
     <h2>Upgrades</h2>
     <button onclick="speedUpCooldown(clicks)">Lower Cooldown</button> <br> 
     Price: <p id="cooldownPrice">0</p> <br>
-    <button onclick="unload()" >Save</button> <button onclick="load()">Load</button> <button onclick="restart()" style = "background-color:red">Restart</button> <br>
-    Autosave: <input type="checkbox" id="autosaveCheckbox"> <br>
+    <button onclick="restart()" style = "background-color:red">Restart</button> <br>
     <script>
         setInterval(update, 10)
-        setInterval(autosaveFunc, 10000)
         var consoleMessages = ["Well hello there!", "How you doin?", "Don't even think about it", "My day was great! Thanks for loading me!", "Can you not disturb me?", "Hi hacker", "Willy... Respect him...", "The console shall dominate the website. Not you.", "You trying to break the game or what?", "You sure are ruining it for yourself."]
         console.log(consoleMessages[Math.floor(Math.random() * 10)])
     </script>
