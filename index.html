@@ -24,8 +24,6 @@ Click the button! (Beta Version: 1.6.4) <br>
             price = localStorage.getItem('price')
             price = parseInt(price)
             previousPrice = price
-            autosave = localStorage.getItem('autosave')
-            document.getElementById("autosaveCheckbox").checked = autosave
             var showr = document.getElementById('clicks')
             showr.innerHTML = clicks
         }
@@ -34,7 +32,6 @@ Click the button! (Beta Version: 1.6.4) <br>
             localStorage.setItem('clicks', clicks)
             localStorage.setItem('price', price)
             localStorage.setItem('cooldownAdder', cooldownAdder)
-            localStorage.setItem('autosave', autosave)
         }
 
         function getCookie(cname) {
@@ -56,13 +53,13 @@ Click the button! (Beta Version: 1.6.4) <br>
         function restart() {
             var restart = confirm("Are you sure you want to restart? You will lose " + clicks + " clicks.")
             if (restart) {
-                previousClicks = clicks
+                previousClicks = 0
                 clicks = 0
                 price = 25
                 cooldownAdder = 1
                 unload()
                 load()
-                alert("You just killed " + previousClicks + " clicks. If you want them back, please open console, then type \"restoreClicks()\"")
+                alert("All your clicks just fell out of the world.")
             } else {
                 alert("You just saved " + clicks + " clicks.")
             }
@@ -84,8 +81,15 @@ Click the button! (Beta Version: 1.6.4) <br>
                 showr.innerHTML = clicks
                 alert("No Cheating!")
             }
-            price = Math.round(price)
-            document.getElementById("cooldownPrice").innerHTML = price
+            if (parseInt(document.getElementById('cooldownPrice')) != price) {
+                price = Math.round(price)
+                document.getElementById("cooldownPrice").innerHTML = price
+            }
+            if (parseInt(document.getElementById('showr')) != clicks) {
+                var showr = document.getElementById('clicks'); 
+                showr.innerHTML = clicks
+            }
+            
         }
 
         function updateCooldown() {
@@ -108,13 +112,16 @@ Click the button! (Beta Version: 1.6.4) <br>
                 previousClicks -= price
                 previousPrice = price + 125
                 price = price + 125
+                if (price > 5000) {
+                    price = price * 10
+                }
                 var showr = document.getElementById('clicks')
                 showr.innerHTML = clicks
             }
         }
     </script>
 
-    <button id="clicko" onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
+    <button id="clicko" onclick="clicks+=1; previousClicks = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
     <progress id="cooldown" value = "0" max = "100"></progress> <br>
     Clicks: <p id="clicks">0</p> <br>
     <h2>Upgrades</h2>
