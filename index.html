@@ -102,6 +102,8 @@ All you have to do is click the button! <br>
             cooldownAdder += 0.1
             previousPrice = price * 25
             price = price * 25
+            previousClicks -= clicks
+            clicks -= price
         }
     }
 
