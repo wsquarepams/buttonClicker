@@ -100,10 +100,12 @@ All you have to do is click the button! <br>
         if (cookieCode == clicks && clicks >= price) {
             cookieEnabled += 0.1
             cooldownAdder += 0.1
-            previousPrice = price * 25
-            price = price * 25
             previousClicks -= clicks
             clicks -= price
+            previousPrice = price * 25
+            price = price * 25
+            var showr = document.getElementById('clicks')
+            showr.innerHTML = clicks
         }
     }
 
