@@ -1,137 +1,138 @@
 <h1> WELCOME TO BUTTON CLICK! </h1>
-Click the button! (Version: Beta 0.4) <br>
+Click the button! (Beta Version: 1.6.4) <br>
 
 <head>
     <title>Button Clicker</title>
 </head>
+<body onload="load()" onunload="unload()">
+    <script>
+        var clicks = 0
+        var previousClicks = 0
+        var cooldownAdder = 1
+        var cookieEnabled = 1
+        var cooldownInterval;
+        var price = 25
+        var previousPrice = 25
+        var autosave = true
+        function load() {
+            clicks = localStorage.getItem('clicks')
+            clicks = parseInt(clicks)
+            previousClicks = clicks
+            cooldownAdder = localStorage.getItem('cooldownAdder')
+            cooldownAdder = parseInt(cooldownAdder)
+            cookieEnabled = cooldownAdder
+            price = localStorage.getItem('price')
+            price = parseInt(price)
+            previousPrice = price
+            autosave = localStorage.getItem('autosave')
+            document.getElementById("autosaveCheckbox").checked = autosave
+            var showr = document.getElementById('clicks')
+            showr.innerHTML = clicks
+        }
+        
+        function unload() {
+            localStorage.setItem('clicks', clicks)
+            localStorage.setItem('price', price)
+            localStorage.setItem('cooldownAdder', cooldownAdder)
+            localStorage.setItem('autosave', autosave)
+        }
 
-<script>
-    var clicks = 0
-    var previousClicks = 0
-    var cooldownAdder = 1
-    var cookieEnabled = 1
-    var cooldownInterval;
-    var price = 25
-    var previousPrice = 25
-    var autosave = true
-    function load() {
-        clicks = localStorage.getItem('clicks')
-        clicks = parseInt(clicks)
-        previousClicks = clicks
-        cooldownAdder = localStorage.getItem('cooldownAdder')
-        cooldownAdder = parseInt(cooldownAdder)
-        cookieEnabled = cooldownAdder
-        price = localStorage.getItem('price')
-        price = parseInt(price)
-        previousPrice = price
-        autosave = localStorage.getItem('autosave')
-        document.getElementById("autosaveCheckbox").checked = autosave
-        var showr = document.getElementById('clicks')
-        showr.innerHTML = clicks
-    }
-    
-    function unload() {
-        localStorage.setItem('clicks', clicks)
-        localStorage.setItem('price', price)
-        localStorage.setItem('cooldownAdder', cooldownAdder)
-        localStorage.setItem('autosave', autosave)
-    }
-
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-             while (c.charAt(0) == ' ') {
-                  c = c.substring(1);
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
             }
-           if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
+            return "";
+        }
+        
+        function restart() {
+            var restart = confirm("Are you sure you want to restart? You will lose " + clicks + " clicks.")
+            if (restart) {
+                previousClicks = clicks
+                clicks = 0
+                price = 25
+                cooldownAdder = 1
+                unload()
+                load()
+                alert("You just killed " + previousClicks + " clicks. If you want them back, please open console, then type \"restoreClicks()\"")
+            } else {
+                alert("You just saved " + clicks + " clicks.")
             }
         }
-        return "";
-    }
-    
-    function restart() {
-        var restart = confirm("Are you sure you want to restart? You will lose " + clicks + " clicks.")
-        if (restart) {
-            previousClicks = clicks
-            clicks = 0
-            price = 25
-            cooldownAdder = 1
+
+        function restoreClicks() {
+            clicks = previousClicks
             unload()
             load()
-            alert("You just killed " + previousClicks + " clicks. If you want them back, please open console, then type \"restoreClicks()\"")
-        } else {
-            alert("You just saved " + clicks + " clicks.")
+            alert("You just revived " + clicks + " clicks.")
         }
-    }
 
-    function restoreClicks() {
-        clicks = previousClicks
-        unload()
-        load()
-        alert("You just revived " + clicks + " clicks.")
-    }
-
-    function update() {
-        if (clicks > previousClicks || cooldownAdder > cookieEnabled || price > previousPrice) {
-            clicks = previousClicks
-            cooldownAdder = cookieEnabled
-            price = previousPrice
-            var showr = document.getElementById('clicks')
-            showr.innerHTML = clicks
-            alert("No Cheating!")
+        function update() {
+            if (clicks > previousClicks || cooldownAdder > cookieEnabled || price > previousPrice) {
+                clicks = previousClicks
+                cooldownAdder = cookieEnabled
+                price = previousPrice
+                var showr = document.getElementById('clicks')
+                showr.innerHTML = clicks
+                alert("No Cheating!")
+            }
+            price = Math.round(price)
+            document.getElementById("cooldownPrice").innerHTML = price
         }
-        price = Math.round(price)
-        document.getElementById("cooldownPrice").innerHTML = price
-    }
 
-    function updateCooldown() {
-        var cooldown = document.getElementById("cooldown")
-        var button = document.getElementById("clicko")
-        button.disabled = true
-        cooldown.value += cooldownAdder
-        if (cooldown.value == 100) {
-            clearInterval(cooldownInterval)
-            cooldown.value = "0"
-            button.disabled = false
+        function updateCooldown() {
+            var cooldown = document.getElementById("cooldown")
+            var button = document.getElementById("clicko")
+            button.disabled = true
+            cooldown.value += cooldownAdder
+            if (cooldown.value == 100) {
+                clearInterval(cooldownInterval)
+                cooldown.value = "0"
+                button.disabled = false
+            }
         }
-    }
 
-    function speedUpCooldown(cookieCode) {
-        if (cookieCode == clicks && clicks >= price) {
-            cookieEnabled += 0.1
-            cooldownAdder += 0.1
-            clicks -= price
-            previousClicks -= price
-            previousPrice = price + 125
-            price = price + 125
-            var showr = document.getElementById('clicks')
-            showr.innerHTML = clicks
+        function speedUpCooldown(cookieCode) {
+            if (cookieCode == clicks && clicks >= price) {
+                cookieEnabled += 0.1
+                cooldownAdder += 0.1
+                clicks -= price
+                previousClicks -= price
+                previousPrice = price + 125
+                price = price + 125
+                var showr = document.getElementById('clicks')
+                showr.innerHTML = clicks
+            }
         }
-    }
 
-    function autosaveFunc() {
-        var yesAutoSave = document.getElementById("autosaveCheckbox")
-        if (yesAutoSave.checked) {
-            unload()
+        function autosaveFunc() {
+            var yesAutoSave = document.getElementById("autosaveCheckbox")
+            if (yesAutoSave.checked) {
+                unload()
+            }
         }
-    }
-</script>
+    </script>
 
-<button id="clicko" onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
-<progress id="cooldown" value = "0" max = "100"></progress> <br>
-Clicks: <p id="clicks">0</p> <br>
-<h2>Upgrades</h2>
-<button onclick="speedUpCooldown(clicks)">Lower Cooldown</button> <br> 
-Price: <p id="cooldownPrice">0</p> <br>
-<button onclick="unload()" >Save</button> <button onclick="load()">Load</button> <button onclick="restart()" style = "background-color:red">Restart</button> <br>
-Autosave: <input type="checkbox" id="autosaveCheckbox"> <br>
-<script>
-    setInterval(update, 10)
-    setInterval(autosaveFunc, 10000)
-    var consoleMessages = ["Well hello there!", "How you doin?", "Don't even think about it", "My day was great! Thanks for loading me!", "Can you not disturb me?", "Hi hacker", "Willy... Respect him...", "The console shall dominate the website. Not you.", "You trying to break the game or what?", "You sure are ruining it for yourself."]
-    console.log(consoleMessages[Math.floor(Math.random() * 10)])
-</script>
+    <button id="clicko" onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
+    <progress id="cooldown" value = "0" max = "100"></progress> <br>
+    Clicks: <p id="clicks">0</p> <br>
+    <h2>Upgrades</h2>
+    <button onclick="speedUpCooldown(clicks)">Lower Cooldown</button> <br> 
+    Price: <p id="cooldownPrice">0</p> <br>
+    <button onclick="unload()" >Save</button> <button onclick="load()">Load</button> <button onclick="restart()" style = "background-color:red">Restart</button> <br>
+    Autosave: <input type="checkbox" id="autosaveCheckbox"> <br>
+    <script>
+        setInterval(update, 10)
+        setInterval(autosaveFunc, 10000)
+        var consoleMessages = ["Well hello there!", "How you doin?", "Don't even think about it", "My day was great! Thanks for loading me!", "Can you not disturb me?", "Hi hacker", "Willy... Respect him...", "The console shall dominate the website. Not you.", "You trying to break the game or what?", "You sure are ruining it for yourself."]
+        console.log(consoleMessages[Math.floor(Math.random() * 10)])
+    </script>
+</body>
