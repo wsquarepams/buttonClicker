@@ -9,6 +9,7 @@ All you have to do is click the button! <br>
     var cooldownInterval;
     var price = 25
     var previousPrice = 25
+    var autosave = true
     function load() {
         clicks = localStorage.getItem('clicks')
         clicks = parseInt(clicks)
@@ -19,6 +20,8 @@ All you have to do is click the button! <br>
         price = localStorage.getItem('price')
         price = parseInt(price)
         previousPrice = price
+        autosave = localStorage.getItem('autosave')
+        document.getElementById("autosaveCheckbox").checked = autosave
         var showr = document.getElementById('clicks')
         showr.innerHTML = clicks
     }
@@ -27,6 +30,7 @@ All you have to do is click the button! <br>
         localStorage.setItem('clicks', clicks)
         localStorage.setItem('price', price)
         localStorage.setItem('cooldownAdder', cooldownAdder)
+        localStorage.setItem('autosave', autosave)
     }
 
     function getCookie(cname) {
@@ -100,6 +104,13 @@ All you have to do is click the button! <br>
             price = price * 25
         }
     }
+
+    function autosaveFunc() {
+        var yesAutoSave = document.getElementById("autosaveCheckbox")
+        if (yesAutoSave.checked) {
+            unload()
+        }
+    }
 </script>
 
 <button id="clicko" onclick="clicks+=1; previousClicks = clicks; var showr = document.getElementById('clicks'); showr.innerHTML = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:100px; width:100px; background-color:#ffffff">CLICK ME!</button><br>
@@ -108,7 +119,11 @@ Clicks: <p id="clicks">0</p> <br>
 <h2>Upgrades</h2>
 <button onclick="speedUpCooldown(clicks)">Lower Cooldown</button> <br> 
 Price: <p id="cooldownPrice">0</p> <br>
-<button onclick="unload()" >Save</button> <button onclick="load()">Load</button> <button onclick="restart()" style = "background-color:red">Restart</button>
+<button onclick="unload()" >Save</button> <button onclick="load()">Load</button> <button onclick="restart()" style = "background-color:red">Restart</button> <br>
+Autosave: <input type="checkbox" id="autosaveCheckbox"> <br>
 <script>
     setInterval(update, 10)
+    setInterval(autosaveFunc, 10000)
+    var consoleMessages = ["Well hello there!", "How you doin?", "Don't even think about it", "My day was great! Thanks for loading me!", "Can you not disturb me?", "Hi hacker", "Willy... Respect him...", "The console shall dominate the website. Not you.", "You trying to break the game or what?", "You sure are ruining it for yourself."]
+    console.log(consoleMessages[Math.floor(Math.random() * 10)])
 </script>
