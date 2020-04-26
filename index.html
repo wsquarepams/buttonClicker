@@ -121,7 +121,7 @@ Click the button! (Beta Version: 1.6.4) <br>
         }
     </script>
 
-    <button id="clicko" onclick="clicks+=1; previousClicks = clicks; cooldownInterval = setInterval(updateCooldown, 1);" style = "height:160px; width:160px; background-color:#ffffff">CLICK ME!</button><br>
+    <button id="clicko" onclick="clicks+=1; previousClicks = clicks; cooldownInterval = setInterval(updateCooldown, 1); unload()" style = "height:160px; width:160px; background-color:#ffffff">CLICK ME!</button><br>
     <progress id="cooldown" value = "0" max = "100"></progress> <br>
     Clicks: <p id="clicks">0</p> <br>
     <h2>Upgrades</h2>
